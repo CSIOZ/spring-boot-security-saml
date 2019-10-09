@@ -4,18 +4,21 @@ import com.github.ulisesbocchio.spring.boot.security.saml.configurer.ServiceProv
 import com.github.ulisesbocchio.spring.boot.security.saml.properties.SAMLProcessorProperties;
 import com.github.ulisesbocchio.spring.boot.security.saml.properties.SAMLSSOProperties;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.velocity.app.VelocityEngine;
 import org.assertj.core.util.VisibleForTesting;
+import org.opensaml.liberty.binding.decoding.HTTPPAOS11Decoder;
+import org.opensaml.saml2.binding.decoding.HTTPSOAP11DecoderImpl;
 import org.opensaml.xml.parse.ParserPool;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.saml.processor.*;
 import org.springframework.security.saml.util.VelocityFactory;
 import org.springframework.security.saml.websso.ArtifactResolutionProfile;
 import org.springframework.security.saml.websso.ArtifactResolutionProfileImpl;
+import pl.csioz.gov.login.encoder.HTTPPAOS11Encoder;
+import pl.csioz.gov.login.encoder.HTTPSOAP11Encoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,12 +127,12 @@ public class SAMLProcessorConfigurer extends SecurityConfigurerAdapter<Void, Ser
 
     @VisibleForTesting
     protected HTTPPAOS11Binding createDefaultPaosBinding() {
-        return new HTTPPAOS11Binding(parserPool);
+        return new HTTPPAOS11Binding(new HTTPPAOS11Decoder(parserPool), new HTTPPAOS11Encoder());
     }
 
     @VisibleForTesting
     protected HTTPSOAP11Binding createDefaultSoapBinding() {
-        return new HTTPSOAP11Binding(parserPool);
+        return new HTTPSOAP11Binding(new HTTPSOAP11DecoderImpl(parserPool), new HTTPSOAP11Encoder());
     }
 
     @VisibleForTesting
@@ -139,7 +142,8 @@ public class SAMLProcessorConfigurer extends SecurityConfigurerAdapter<Void, Ser
         HttpClient httpClient = new HttpClient(params, new MultiThreadedHttpConnectionManager());
         ArtifactResolutionProfileImpl artifactResolutionProfile = new ArtifactResolutionProfileImpl(httpClient);
         builder.setSharedObject(ArtifactResolutionProfile.class, artifactResolutionProfile);
-        HTTPSOAP11Binding soapBinding = new HTTPSOAP11Binding(parserPool);
+        HTTPSOAP11Encoder soapEncoder = new HTTPSOAP11Encoder();
+        HTTPSOAP11Binding soapBinding = new HTTPSOAP11Binding(new HTTPSOAP11DecoderImpl(parserPool), soapEncoder);
         artifactResolutionProfile.setProcessor(new SAMLProcessorImpl(soapBinding));
         return new HTTPArtifactBinding(parserPool, getVelocityEngine(), artifactResolutionProfile);
     }
