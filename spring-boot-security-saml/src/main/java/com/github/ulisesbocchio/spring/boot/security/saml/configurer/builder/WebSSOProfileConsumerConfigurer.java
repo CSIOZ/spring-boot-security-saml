@@ -3,7 +3,7 @@ package com.github.ulisesbocchio.spring.boot.security.saml.configurer.builder;
 import com.github.ulisesbocchio.spring.boot.security.saml.configurer.ServiceProviderBuilder;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.saml.websso.WebSSOProfileConsumer;
-import org.springframework.security.saml.websso.WebSSOProfileConsumerImpl;
+import pl.csioz.gov.login.decrypt.WebSSOProfileConsumerGov;
 
 /**
  * Builder configurer that takes care of configuring/customizing the {@link WebSSOProfileConsumer} bean.
@@ -46,6 +46,6 @@ public class WebSSOProfileConsumerConfigurer extends SecurityConfigurerAdapter<V
     }
 
     protected WebSSOProfileConsumer createWebSSOProfileConsumer() {
-        return new WebSSOProfileConsumerImpl();
+        return new WebSSOProfileConsumerGov();
     }
 }
