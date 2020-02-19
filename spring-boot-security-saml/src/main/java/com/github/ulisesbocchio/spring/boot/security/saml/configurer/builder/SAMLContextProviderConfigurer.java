@@ -7,7 +7,6 @@ import org.assertj.core.util.VisibleForTesting;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.saml.context.SAMLContextProvider;
 import org.springframework.security.saml.context.SAMLContextProviderImpl;
-import org.springframework.security.saml.context.SAMLContextProviderLB;
 
 /**
  * Builder configurer that takes care of configuring/customizing the {@link SAMLContextProvider} bean.

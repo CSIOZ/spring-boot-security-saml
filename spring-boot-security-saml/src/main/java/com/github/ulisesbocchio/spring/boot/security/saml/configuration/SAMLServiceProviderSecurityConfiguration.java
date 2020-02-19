@@ -203,8 +203,12 @@ public class SAMLServiceProviderSecurityConfiguration implements InitializingBea
 
             http
                 .authorizeRequests()
+
                 .anyRequest()
-                .authenticated();
+                .permitAll()
+                    .antMatchers("/saml")
+//                .anyRequest()
+                    .authenticated();
             // @formatter:on
         }
 

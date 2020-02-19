@@ -139,6 +139,7 @@ public class SAMLProcessorConfigurer extends SecurityConfigurerAdapter<Void, Ser
     protected HTTPArtifactBinding createDefaultArtifactBinding(ServiceProviderBuilder builder) {
         HttpClientParams params = new HttpClientParams();
         params.setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 60000);
+
         HttpClient httpClient = new HttpClient(params, new MultiThreadedHttpConnectionManager());
         ArtifactResolutionProfileImpl artifactResolutionProfile = new ArtifactResolutionProfileImpl(httpClient);
         builder.setSharedObject(ArtifactResolutionProfile.class, artifactResolutionProfile);

@@ -522,7 +522,7 @@ openssl req -new -x509 -key localhost.key -out localhost.pem -days 3650 -subj /C
 openssl pkcs8 -topk8 -inform PEM -outform DER -in  localhost.key -out  localhost.key.der -nocrypt
 ```
 
-### Add your own `SAMLUserDetailsService`
+### Add your own `SAMLUserDetailsService`   
 
 In order to add a custom `SAMLUserDetailsService` simply use the `authenticationProvider()` builder from the `ServiceProviderBuilder` DSL:
 
